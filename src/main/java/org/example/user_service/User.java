@@ -1,4 +1,4 @@
-package org.example.notificationservice.entiti;
+package org.example.user_service;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +12,10 @@ public class User {
         private Integer age;
 
         private LocalDateTime createdat;
+
+        public  User() {
+            
+        }
 
         public User(String name, String email, Integer age) {
             this.name = name;
