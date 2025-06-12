@@ -1,27 +1,24 @@
 package org.example.notificationservice.service;
 
-import org.example.notificationservice.dto.UserEventDto;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.example.notificationservice.entiti.User;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+
+import java.util.logging.Logger;
 
 @Service
 public class UserEventKafkaConsumer {
 
-    private final EmailService emailService;
+    private final Logger logger = Logger.getLogger(UserEventKafkaConsumer.class.getName());
 
+    @KafkaListener(topics = "user")
+    public void consumerUser(ConsumerRecord<String, User> record) {
+        logger.info(
+                "Received order: order={}, key={}, partition={}"
+        );
 
-    public UserEventKafkaConsumer(EmailService emailService) {
-        this.emailService = emailService;
     }
 
-    @KafkaListener(topics = "user-created")
-    public void consumerUser(UserEventDto userEventDto) {
-        emailService.sendUserCreatedEmail(userEventDto.getEmail());
-    }
-
-    @KafkaListener(topics = "user-deleted")
-    public void consumerUserDeleted(UserEventDto userEventDto) {
-        emailService.sendUserDeletedEmail(userEventDto.getEmail());
-    }
 }

@@ -3,7 +3,7 @@ package org.example.notificationservice.kafkaConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.example.notificationservice.dto.UserEventDto;
+import org.example.notificationservice.entiti.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -21,13 +21,12 @@ public class KafkaConsumerConfig {
 
 
     @Bean
-    public ConsumerFactory<String, UserEventDto> consumerFactory(ObjectMapper objectMapper) {
+    public ConsumerFactory<String, User> consumerFactory(ObjectMapper objectMapper) {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "test");
 
-        JsonDeserializer<UserEventDto> deserializer = new JsonDeserializer<>(UserEventDto.class);
-        deserializer.addTrustedPackages("org.example.user_service.dto");
+        JsonDeserializer<User> deserializer = new JsonDeserializer<>(User.class,  objectMapper);
 
         return new DefaultKafkaConsumerFactory<>(
                 props,
@@ -36,10 +35,10 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, UserEventDto> kafkaListenerContainerFactory(
-            ConsumerFactory<String, UserEventDto> consumerFactory
+    public ConcurrentKafkaListenerContainerFactory<String, User> kafkaListenerContainerFactory(
+            ConsumerFactory<String, User> consumerFactory
     ) {
-        var containerFactory = new ConcurrentKafkaListenerContainerFactory<String, UserEventDto>();
+        var containerFactory = new ConcurrentKafkaListenerContainerFactory<String, User>();
         containerFactory.setConcurrency(1);
         containerFactory.setConsumerFactory(consumerFactory);
 
