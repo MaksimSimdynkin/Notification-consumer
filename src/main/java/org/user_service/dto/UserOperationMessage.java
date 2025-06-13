@@ -1,4 +1,4 @@
-package org.example.notificationservice.dto;
+package org.user_service.dto;
 
 public class UserOperationMessage {
     private String operation;

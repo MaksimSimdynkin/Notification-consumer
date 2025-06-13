@@ -1,9 +1,9 @@
 package org.example.notificationservice.service;
 
 
-import org.example.notificationservice.dto.UserOperationMessage;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import org.user_service.dto.UserOperationMessage;
 
 
 @Service
@@ -21,14 +21,10 @@ public class UserOperationKafkaConsumer {
         String operation = message.getOperation();
         String email = message.getEmail();
 
-        if(operation.equalsIgnoreCase("create")) {
+        if("Create".equalsIgnoreCase(operation)) {
             emailService.sendEmail(email, "Здравствуйте! Ваш аккаунт на сайте был успешно создан.");
-        }else if(operation.equalsIgnoreCase("delete")) {
-            emailService.sendEmail(email, "Здравствуйте! Ваш аккаунт на сайте был удалён.");
-            
-
-
-
+        }else if("Delete".equalsIgnoreCase(operation)) {
+            emailService.sendEmail(email, "Здравствуйте! Ваш аккаунт на сайте был успешно удален.");
         }
     }
 
