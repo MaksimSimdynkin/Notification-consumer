@@ -21,11 +21,11 @@ public class EmailController {
     public ResponseEntity<String> sendEmail(@Valid @RequestBody EmailRequest request) {
         try {
             emailService.sendEmail(request.getTo(), request.getSubject(), request.getText());
-            return ResponseEntity.ok("Email sent successfully");
+            return ResponseEntity.ok("Электронное письмо успешно отправлено");
         } catch (Exception e) {
-            log.error("Failed to send email", e);
+            log.error("Не удалось отправить электронное письмо", e);
             return ResponseEntity.internalServerError()
-                    .body("Failed to send email: " + e.getMessage());
+                    .body("Не удалось отправить электронное письмо: " + e.getMessage());
         }
     }
 }
