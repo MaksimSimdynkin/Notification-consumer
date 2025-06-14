@@ -1,4 +1,4 @@
-package org.example.notificationservice.service;
+package org.example.notificationservice.integration;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.notificationservice.model.UserOperationMessage;
@@ -7,16 +7,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class KafkaConsumerService {
-    private final EmailService emailService;
+public class TestKafkaConsumerService {
+    private final TestEmailService emailService;
     
-    public KafkaConsumerService(EmailService emailService) {
+    public TestKafkaConsumerService(TestEmailService emailService) {
         this.emailService = emailService;
     }
     
-    @KafkaListener(topics = "user-operation-topic", groupId = "notification-service")
+    @KafkaListener(topics = "user-operation-topic", groupId = "test-group", containerFactory = "kafkaListenerContainerFactory")
     public void consume(UserOperationMessage message) {
-        log.info("Received message: {}", message);
+        log.info("Test consumer received message: {}", message);
         
         String subject;
         String text;
@@ -37,4 +37,4 @@ public class KafkaConsumerService {
         
         emailService.sendEmail(message.getEmail(), subject, text);
     }
-}
+} 
