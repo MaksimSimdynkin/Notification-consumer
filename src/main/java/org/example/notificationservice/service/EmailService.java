@@ -20,21 +20,27 @@ public class EmailService {
     
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
+        log.info("EmailService инициализирован с mailSender типа: {}", mailSender.getClass().getName());
+        log.info("Email отправителя настроен как: {}", fromEmail);
     }
     
     public void sendEmail(String to, String subject, String text) {
-        try{
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(fromEmail);
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
-        
+        log.info("Попытка отправки email получателю: {}, тема: {}, от: {}", to, subject, fromEmail);
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(fromEmail);
+            message.setTo(to);
+            message.setSubject(subject);
+            message.setText(text);
+            
+            log.debug("Создано сообщение: {}", message);
+            log.info("Отправка сообщения через SMTP сервер...");
             mailSender.send(message);
-            log.info("Email sent successfully to: {}", to);
+            log.info("Email успешно отправлен получателю: {}", to);
         } catch (Exception e) {
-            log.error("Failed to send email to: {}", to, e);
-            throw new RuntimeException("Failed to send email", e);
+            log.error("Ошибка при отправке email получателю: {}. Тип ошибки: {}, Сообщение: {}", 
+                     to, e.getClass().getName(), e.getMessage(), e);
+            throw new RuntimeException("Не удалось отправить email: " + e.getMessage(), e);
         }
     }
 }
