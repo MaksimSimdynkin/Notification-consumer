@@ -1,5 +1,7 @@
 package org.example.notificationservice.service;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class EmailService {
-    private final JavaMailSender mailSender;
+    protected final JavaMailSender mailSender;
 
     @Value("${spring.mail.username}")
     private String fromEmail;
